@@ -1,0 +1,114 @@
+{% extends "schedule/base.html" %}
+
+{% block title %}Сейчас{% endblock %}
+
+{% block content %}
+<style>
+    .time { color: #666; margin-bottom: 1.5rem; font-size: 14px; }
+    .slot {
+        font-size: 1.1rem;
+        margin: 1rem 0;
+        padding: 1rem 1.2rem;
+        background: #fff;
+        border-radius: 8px;
+        border: 1px solid #e5e5e5;
+    }
+    .message {
+        padding: 2rem;
+        background: #fff;
+        border-radius: 8px;
+        color: #666;
+        border: 1px solid #e5e5e5;
+    }
+    .grid {
+        border-collapse: collapse;
+        background: #fff;
+        border-radius: 8px;
+        overflow: hidden;
+        width: 100%;
+        margin-bottom: 1.5rem;
+        font-size: 13px;
+    }
+    .grid th, .grid td {
+        padding: 0.6rem 1rem;
+        text-align: left;
+        border-bottom: 1px solid #eee;
+    }
+    .grid th { background: #fafafa; font-weight: 600; font-size: 12px; }
+    .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+    .card {
+        background: #fff;
+        border-radius: 8px;
+        padding: 1rem 1.5rem;
+        border: 1px solid #e5e5e5;
+    }
+    .card h2 {
+        margin-top: 0;
+        font-size: 0.85rem;
+        color: #888;
+        text-transform: uppercase;
+        letter-spacing: 0.03em;
+    }
+    .tag {
+        display: inline-block;
+        padding: 0.2rem 0.6rem;
+        margin: 0.15rem;
+        background: #eef;
+        border-radius: 4px;
+        font-size: 0.9rem;
+    }
+</style>
+
+<h1>{{ weekday_name }}</h1>
+<div class="time">{{ now|date:"H:i" }}</div>
+
+{% if message %}
+    <div class="message">{{ message }}</div>
+{% else %}
+    <div class="slot">
+        <strong>Идёт {{ slot.lesson_number }}-й урок</strong>
+        ({{ slot.start_time|time:"H:i" }} – {{ slot.end_time|time:"H:i" }})
+    </div>
+
+    <h2 style="font-size:0.85rem; color:#888; text-transform:uppercase; letter-spacing:0.03em;">Кто где сейчас</h2>
+    <table class="grid">
+        <thead>
+            <tr>
+                <th>Класс</th>
+                <th>Предмет</th>
+                <th>Учитель</th>
+                <th>Кабинет</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for l in lessons %}
+            <tr>
+                <td>{{ l.school_class }}</td>
+                <td>{{ l.subject }}</td>
+                <td>{{ l.teacher }}</td>
+                <td>{{ l.classroom }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="cols">
+        <div class="card">
+            <h2>Свободные кабинеты</h2>
+            {% for c in free_classrooms %}
+                <span class="tag">{{ c }}</span>
+            {% empty %}
+                <em>нет</em>
+            {% endfor %}
+        </div>
+        <div class="card">
+            <h2>Свободные классы</h2>
+            {% for c in free_classes %}
+                <span class="tag">{{ c }}</span>
+            {% empty %}
+                <em>нет</em>
+            {% endfor %}
+        </div>
+    </div>
+{% endif %}
+{% endblock %}

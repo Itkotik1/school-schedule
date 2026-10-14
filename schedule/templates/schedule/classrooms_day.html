@@ -1,0 +1,99 @@
+{% extends "schedule/base.html" %}
+
+{% block title %}Кабинеты — {{ day_name }}{% endblock %}
+
+{% block content %}
+<style>
+    .days a {
+        display: inline-block;
+        padding: 0.4rem 0.9rem;
+        margin-right: 0.3rem;
+        background: #fff;
+        border-radius: 6px;
+        text-decoration: none;
+        color: #333;
+        border: 1px solid #ddd;
+        font-size: 13px;
+    }
+    .days a.active { background: #333; color: #fff; border-color: #333; }
+    .days { margin-bottom: 1rem; }
+
+    .grid {
+        border-collapse: collapse;
+        background: #fff;
+        width: 100%;
+        font-size: 12px;
+    }
+    .grid th, .grid td {
+        border: 1px solid #ececec;
+        padding: 0.4rem 0.5rem;
+        vertical-align: top;
+    }
+    .grid th {
+        background: #fafafa;
+        font-size: 11px;
+        text-align: center;
+        white-space: nowrap;
+    }
+    .grid th .num { font-size: 14px; font-weight: 600; display: block; }
+    .grid th .time { color: #999; font-weight: 400; font-size: 10px; }
+    .grid td.room {
+        font-weight: 600;
+        background: #fafafa;
+        white-space: nowrap;
+        font-size: 12px;
+    }
+    .grid td.cell-free {
+        color: #d0d0d0;
+        text-align: center;
+    }
+    .grid .subject { font-weight: 600; }
+    .grid .cls { color: #444; }
+    .grid .teacher { color: #888; font-size: 10px; }
+</style>
+
+<h1>Кабинеты — {{ day_name }}</h1>
+
+<div class="days">
+    {% for i, name in days %}
+        <a href="{% url 'schedule:classrooms_day' i %}"
+           class="{% if i == day %}active{% endif %}">{{ name }}</a>
+    {% endfor %}
+</div>
+
+<table class="grid">
+    <thead>
+        <tr>
+            <th>Кабинет</th>
+            {% for num in lesson_numbers %}
+                <th>
+                    <span class="num">{{ num }}</span>
+                    <span class="time">
+                        {% for n, s in slots.items %}
+                            {% if n == num %}{{ s.start_time|time:"H:i" }}–{{ s.end_time|time:"H:i" }}{% endif %}
+                        {% endfor %}
+                    </span>
+                </th>
+            {% endfor %}
+        </tr>
+    </thead>
+    <tbody>
+        {% for row in rows %}
+            <tr>
+                <td class="room">{{ row.classroom }}</td>
+                {% for cell in row.cells %}
+                    {% if cell.lesson %}
+                        <td>
+                            <div class="subject">{{ cell.lesson.subject }}</div>
+                            <div class="cls">{{ cell.lesson.school_class }}</div>
+                            <div class="teacher">{{ cell.lesson.teacher }}</div>
+                        </td>
+                    {% else %}
+                        <td class="cell-free">—</td>
+                    {% endif %}
+                {% endfor %}
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

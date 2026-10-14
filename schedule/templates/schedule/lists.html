@@ -1,0 +1,44 @@
+{% extends "schedule/base.html" %}
+
+{% block title %}Расписания{% endblock %}
+
+{% block content %}
+<style>
+    .section-title {
+        font-size: 0.85rem;
+        color: #888;
+        text-transform: uppercase;
+        letter-spacing: 0.03em;
+        margin: 2rem 0 0.8rem 0;
+    }
+    .tag {
+        display: inline-block;
+        padding: 0.4rem 0.9rem;
+        margin: 0.2rem;
+        background: #fff;
+        border-radius: 6px;
+        text-decoration: none;
+        color: #333;
+        border: 1px solid #ddd;
+        font-size: 13px;
+        transition: all 0.1s;
+    }
+    .tag:hover {
+        background: #333;
+        color: #fff;
+        border-color: #333;
+    }
+</style>
+
+<h1>Расписания</h1>
+
+<div class="section-title">Классы</div>
+{% for c in classes %}
+    <a class="tag" href="{% url 'schedule:class_schedule' c|urlencode %}">{{ c }}</a>
+{% endfor %}
+
+<div class="section-title">Учителя</div>
+{% for t in teachers %}
+    <a class="tag" href="{% url 'schedule:teacher_schedule' t|urlencode %}">{{ t }}</a>
+{% endfor %}
+{% endblock %}

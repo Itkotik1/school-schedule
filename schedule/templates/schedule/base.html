@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}Расписание{% endblock %}</title>
+    <style>
+        * { box-sizing: border-box; }
+body {
+    font-family: -apple-system, sans-serif;
+    margin: 0;
+    background: #f5f5f7;
+    color: #222;
+    font-size: 14px;
+}
+nav {
+    background: #fff;
+    border-bottom: 1px solid #e5e5e5;
+    padding: 0.8rem 1.5rem;
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+nav .brand { font-weight: 700; margin-right: 1rem; }
+nav a {
+    color: #444;
+    text-decoration: none;
+    padding: 0.3rem 0.6rem;
+    border-radius: 6px;
+}
+nav a:hover { background: #f0f0f5; }
+nav a.active { background: #333; color: #fff; }
+main { padding: 1.5rem; }
+h1 { margin: 0 0 1rem 0; font-size: 1.6rem; }
+
+@media (max-width: 700px) {
+    main { padding: 1rem; }
+
+    nav {
+        padding: 0.6rem 1rem;
+        gap: 0.6rem;
+        font-size: 13px;
+        flex-wrap: wrap;
+    }
+
+    nav .brand { margin-right: 0; width: 100%; }
+
+    h1 { font-size: 1.3rem; }
+
+    .cols { grid-template-columns: 1fr; }  /* вместо двух колонок — одна */
+}
+
+    </style>
+</head>
+<body>
+    <nav>
+        <span class="brand">ШкольноеРасписание</span>
+        <a href="{% url 'schedule:home' %}"
+           class="{% if request.resolver_match.url_name == 'home' %}active{% endif %}">Главная</a>
+        <a href="{% url 'schedule:now' %}"
+           class="{% if request.resolver_match.url_name == 'now' %}active{% endif %}">Сейчас</a>
+        <a href="{% url 'schedule:classrooms_day' 0 %}"
+           class="{% if request.resolver_match.url_name == 'classrooms_day' %}active{% endif %}">Кабинеты</a>
+        <a href="{% url 'schedule:classes_list' %}"
+           class="{% if request.resolver_match.url_name == 'classes_list' %}active{% endif %}">Расписания</a>
+    </nav>
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+</body>
+</html>

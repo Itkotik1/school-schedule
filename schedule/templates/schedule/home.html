@@ -1,0 +1,29 @@
+{% extends "schedule/base.html" %}
+
+{% block title %}ШкольноеРасписание{% endblock %}
+
+{% block content %}
+<h1>ШкольноеРасписание</h1>
+<p>Система для просмотра расписания школы: занятость кабинетов, классов и учителей.</p>
+
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-top: 2rem;">
+    <a href="{% url 'schedule:now' %}" style="text-decoration: none; color: inherit;">
+        <div style="background:#fff; border-radius:8px; padding:1.2rem; border:1px solid #e5e5e5;">
+            <div style="font-weight:600; font-size:1.1rem;">Сейчас</div>
+            <div style="color:#666; margin-top:0.4rem;">Что идёт прямо сейчас, кто где, что свободно</div>
+        </div>
+    </a>
+    <a href="{% url 'schedule:classrooms_day' 0 %}" style="text-decoration: none; color: inherit;">
+        <div style="background:#fff; border-radius:8px; padding:1.2rem; border:1px solid #e5e5e5;">
+            <div style="font-weight:600; font-size:1.1rem;">Кабинеты</div>
+            <div style="color:#666; margin-top:0.4rem;">Занятость кабинетов по дням недели</div>
+        </div>
+    </a>
+    <a href="{% url 'schedule:classes_list' %}" style="text-decoration: none; color: inherit;">
+        <div style="background:#fff; border-radius:8px; padding:1.2rem; border:1px solid #e5e5e5;">
+            <div style="font-weight:600; font-size:1.1rem;">Расписания</div>
+            <div style="color:#666; margin-top:0.4rem;">Расписание любого класса или учителя</div>
+        </div>
+    </a>
+</div>
+{% endblock %}
